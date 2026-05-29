@@ -1,8 +1,18 @@
-const stroke_url = process.env.NEXT_PUBLIC_RESOURCE_URL_1;
-const hepatitis_url = process.env.NEXT_PUBLIC_RESOURCE_URL_2;
+import { api } from "../lib/api";
+
+const stroke_url = api.strokeCreate;
+const hepatitis_url = api.hepatitisCreate;
+
 let userEmail = "";
 if (typeof window !== "undefined") {
-  userEmail = JSON.parse(localStorage.getItem("Auth")).email;
+  const auth = localStorage.getItem("Auth");
+  if (auth) {
+    try {
+      userEmail = JSON.parse(auth).email;
+    } catch {
+      userEmail = "";
+    }
+  }
 }
 export default function DiscoverForm({
   selectedDisease,

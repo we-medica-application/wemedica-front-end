@@ -2,10 +2,11 @@ import TestResult from './sub_components/TestResult'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import ChoiceRadio from './sub_components/ChoiceRadio';
+import { api } from '../lib/api';
 
 export default function ResultComponent() {
-    const stroke_api = process.env.NEXT_PUBLIC_API_URL_1;
-    const hepatitis_api = process.env.NEXT_PUBLIC_API_URL_2;
+    const stroke_api = api.stroke;
+    const hepatitis_api = api.hepatitis;
     let userEmail = "";
     if (typeof window !== "undefined") {
     userEmail = JSON.parse(localStorage.getItem("Auth")).email;

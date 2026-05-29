@@ -1,69 +1,68 @@
 import axios from "axios";
 import useSWR from "swr";
 import { useAuth } from "../auth";
-const stroke_url = process.env.NEXT_PUBLIC_API_URL_1;
-const hepatitis_url = process.env.NEXT_PUBLIC_API_URL_2;
-const cancer_url = process.env.NEXT_PUBLIC_API_URL_3;
+import { api } from "../../lib/api";
+
+function getTokens() {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem("Tokens");
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function authHeaders(tokens) {
+  if (!tokens?.access) return {};
+  return { Authorization: `Bearer ${tokens.access}` };
+}
+
+export async function postResource(url, data, { auth = true } = {}) {
+  const tokens = auth ? getTokens() : null;
+  if (auth && !tokens?.access) {
+    throw new Error("You must be logged in to submit this form.");
+  }
+  const response = await axios.post(url, data, {
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(tokens),
+    },
+  });
+  return response.data;
+}
+
+async function fetchResource(key) {
+  const url = Array.isArray(key) ? key[0] : key;
+  const tokens = getTokens();
+  if (!tokens?.access || !url) {
+    return;
+  }
+  const response = await axios.get(url, { headers: authHeaders(tokens) });
+  return response.data;
+}
 
 export default function useResource() {
-  let { tokens,  } = useAuth();
-  if (typeof window !== "undefined") {
-    tokens = JSON.parse(localStorage.getItem("Tokens"));
-  }
-  const { stroke_data, error1 } = useSWR([stroke_url, tokens], fetchResource);
-  const { hepatitis_data, error2 } = useSWR(
-    [hepatitis_url, tokens],
+  const { tokens: authTokens } = useAuth();
+  const tokens = authTokens || getTokens();
+
+  const { data: stroke_data, error: error1 } = useSWR(
+    tokens?.access ? [api.stroke, tokens.access] : null,
     fetchResource
   );
-  const { cancer_data, error3 } = useSWR([cancer_url, tokens], fetchResource);
+  const { data: hepatitis_data, error: error2 } = useSWR(
+    tokens?.access ? [api.hepatitis, tokens.access] : null,
+    fetchResource
+  );
+  const { data: cancer_data, error: error3 } = useSWR(
+    tokens?.access ? [api.cancer, tokens.access] : null,
+    fetchResource
+  );
 
-  async function fetchResource(url) {
-    if (!tokens) {
-      return;
-    }
-
-    try {
-      const response = await axios.get(customURL, config());
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  async function createResource(info, customURL) {
-    try {
-      await axios.post(customURL, info, config());
-    } catch (error) {
-      handleError(error);
-    }
-  }
-
-  // async function deleteResource(id) {
-
-  //     try {
-  //         const url = apiUrl + id;
-  //         await axios.delete(url, config());
-  //
-  //     } catch (error) {
-  //         handleError(error);
-  //     }
-  // }
-
-  // async function updateResource() {
-  //     // STRETCH
-  //     // Add ability for user to update an existing resource
-  // }
-
-  function config() {
-    return {
-      headers: {
-        Authorization: "Bearer " + tokens.access,
-      },
-    };
-  }
-
-  function handleError(error) {
-    console.error(error);
+  async function createResource(info, url, options = {}) {
+    const { auth = true } = options;
+    return postResource(url, info, { auth });
   }
 
   return {
@@ -74,12 +73,10 @@ export default function useResource() {
     error2,
     error3,
     loading:
-      (tokens && !error1) ||
-      (!error1 && !stroke_data) ||
-      (!error2 && !hepatitis_data) ||
-      (!error3 && !cancer_data),
+      Boolean(tokens?.access) &&
+      ((!error1 && !stroke_data) ||
+        (!error2 && !hepatitis_data) ||
+        (!error3 && !cancer_data)),
     createResource,
-    // deleteResource,
-    // updateResource,
   };
 }

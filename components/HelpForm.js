@@ -1,13 +1,17 @@
 import { useState } from "react";
-import React from "react";
-import useResource from "../contexts/hooks/useResource";
-const cancer_url = process.env.NEXT_PUBLIC_RESOURCE_URL_3;
+import { api } from "../lib/api";
+import { postResource } from "../contexts/hooks/useResource";
 
 export default function HelpForm() {
-  const { createResource, resources } = useResource();
-  // const [Data, setData] = React.useState();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const dataHandler = async (event) => {
     event.preventDefault();
+    setError("");
+    setSuccess(false);
+    setLoading(true);
 
     const cancer = {
       name: event.target.name.value,
@@ -21,20 +25,20 @@ export default function HelpForm() {
       concave_points_mean: event.target.concave_points_mean.value,
       state: event.target.state.value,
     };
-    // const cancer = {
-    //   name: "jehad",
-    //   email: "test@test.com",
-    //   age: "24",
-    //   texture_mean: "1.0",
-    //   area_mean: "1.0",
-    //   smoothness_mean: "1.0",
-    //   compactness_mean: "1.0",
-    //   concavity_mean: "1.0",
-    //   concave_points_mean: "1.0",
-    //   state: "1.0",
-    // };
-    await createResource(cancer, cancer_url);
-    // event.target.reset();
+
+    try {
+      await postResource(api.cancerCreate, cancer, { auth: false });
+      setSuccess(true);
+      event.target.reset();
+    } catch (err) {
+      const message =
+        err?.response?.data?.detail ||
+        err?.message ||
+        "Could not submit your data. Please try again.";
+      setError(typeof message === "string" ? message : JSON.stringify(message));
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -42,7 +46,17 @@ export default function HelpForm() {
         <h1 className="text-center text-pink-600 font-bold text-5xl pt-5">
           Help Us
         </h1>
-        <form action="/help_others" onSubmit={dataHandler}>
+        {success && (
+          <p className="mx-6 text-center text-green-700 font-semibold">
+            Thank you! Your data was submitted successfully.
+          </p>
+        )}
+        {error && (
+          <p className="mx-6 text-center text-red-600 text-sm whitespace-pre-line">
+            {error}
+          </p>
+        )}
+        <form onSubmit={dataHandler}>
           <div className="overflow-hidden shadow sm:rounded-md">
             <div className="px-4 py-5 sm:p-6 ">
               <div className="grid grid-cols-1 gap-6 ">
@@ -202,9 +216,10 @@ export default function HelpForm() {
                 <div className="text-center col-span-32 sm:col-span-6 bg-gray-50 sm:px-6">
                   <button
                     type="submit"
-                    className="justify-around w-3/4 p-4 px-4 py-2 text-xl font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    disabled={loading}
+                    className="justify-around w-3/4 p-4 px-4 py-2 text-xl font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
                   >
-                    Submit
+                    {loading ? "Submitting…" : "Submit"}
                   </button>
                 </div>
               </div>

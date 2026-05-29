@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from "react";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 
-const tokenUrl = process.env.NEXT_PUBLIC_API_URL_Token;
-const registerUrl =
-  process.env.NEXT_PUBLIC_API_URL_Register ||
-  (tokenUrl ? tokenUrl.replace(/\/token\/?$/, "/register/") : "");
+import { api } from "../lib/api";
+
+const tokenUrl = api.token;
+const registerUrl = api.register;
 
 const AuthContext = createContext();
 
