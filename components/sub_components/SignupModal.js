@@ -1,14 +1,23 @@
 import { useState } from "react";
 
 function formatSignupError(error) {
+  const status = error?.response?.status;
   const data = error?.response?.data;
+  if (status === 400 && typeof data === "string" && data.includes("Bad Request")) {
+    return "Server rejected the request (ALLOWED_HOSTS misconfigured on Render). Set ALLOWED_HOSTS to your Render URL, e.g. wemedica-api.onrender.com,.onrender.com";
+  }
   if (!data) {
     if (!error?.message) {
       return "Signup failed. Please check your connection and try again.";
     }
     return error.message;
   }
-  if (typeof data === "string") return data;
+  if (typeof data === "string") {
+    if (data.includes("<!doctype html>")) {
+      return `Signup failed (HTTP ${status || "error"}). Check that the backend is running and CORS/ALLOWED_HOSTS are configured.`;
+    }
+    return data;
+  }
   return Object.entries(data)
     .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(" ") : value}`)
     .join("\n");
@@ -151,6 +160,7 @@ export default function SignUpModal(props) {
                   type="password"
                   className="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-10"
                   name="password"
+                  autoComplete="new-password"
                   required
                   minLength={8}
                   disabled={loading}
