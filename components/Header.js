@@ -1,61 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../contexts/auth";
 import { SITE_NAME } from "../lib/site";
 import LoginModal from "./sub_components/LoginModal";
 import SignUpModal from "./sub_components/SignupModal";
 
-
 export default function Header() {
-  let { user, login, logout, signup } = useAuth();
+  const { user: authUser, login, logout, signup } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
 
+  let user = authUser;
   if (typeof window !== "undefined") {
-    user = JSON.parse(localStorage.getItem("Auth"))
+    const stored = localStorage.getItem("Auth");
+    if (stored) user = JSON.parse(stored);
   }
-  const showLoginModal = () => {
-    setShowLogin(true);
-  };
-  const hideLoginModal = () => {
-    setShowLogin(false);
-  };
-  const showSignUpModal = () => {
-    setShowSignUp(true);
-  };
-  const hideSignUpModal = () => {
-    setShowSignUp(false);
-  };
 
-  if(showLogin)
-  {
-    return <>{showLogin && <LoginModal hide={hideLoginModal} login={login} />}</>
-  }
-  else if(showSignUp)
-  {
-    return <>{showSignUp && <SignUpModal hide={hideSignUpModal} signup={signup} />}</>
-  }
-  else{
   return (
     <>
-      <header className="">
+      <header>
         <nav className="bg-gray-100 z-40 fixed inset-x-0">
           <div className="max-w-6xl mx-auto px-4">
             <div className="flex justify-between">
               <div className="flex space-x-4">
                 <div>
-                  {" "}
                   <a
                     href="#"
                     className="flex items-center py-5 px-2 text-gray-700 hover:text-gray-900"
                   >
-                    {" "}
-                    <i className="bx bxl-medium-old mr-1 text-xl mb-1 text-blue-400"></i>{" "}
-                    <Link href="/"><a href="#" className="font-bold text-grey-300">{SITE_NAME}</a></Link>
-                  </a>{" "}
+                    <i className="bx bxl-medium-old mr-1 text-xl mb-1 text-blue-400"></i>
+                    <Link href="/">
+                      <a href="#" className="font-bold text-grey-300">
+                        {SITE_NAME}
+                      </a>
+                    </Link>
+                  </a>
                 </div>
                 <div className="hidden md:flex items-center space-x-1">
-                  {" "}
                   <Link href="/">
                     <a className="py-5 px-3 text-gray-700 hover:text-gray-900">
                       Home
@@ -102,6 +83,7 @@ export default function Header() {
               <div className="hidden md:flex items-center space-x-1">
                 {user ? (
                   <button
+                    type="button"
                     className="py-2 px-3 bg-lime-400 text-black hover:bg-lime-300 text-sm hover:text-yellow-800 rounded transition duration-300"
                     onClick={logout}
                   >
@@ -109,10 +91,13 @@ export default function Header() {
                   </button>
                 ) : (
                   <>
-                    <button onClick={showLoginModal}>Login</button>
+                    <button type="button" onClick={() => setShowLogin(true)}>
+                      Login
+                    </button>
                     <button
+                      type="button"
                       className="py-2 px-3 bg-lime-400 text-black hover:bg-lime-300 text-sm hover:text-yellow-800 rounded transition duration-300"
-                      onClick={showSignUpModal}
+                      onClick={() => setShowSignUp(true)}
                     >
                       Signup
                     </button>
@@ -120,32 +105,38 @@ export default function Header() {
                 )}
               </div>
               <div className="md:hidden flex items-center">
-                {" "}
-                <button className="mobile-menu-button focus:outline-none">
-                  {" "}
-                  <i className="bx bx-menu text-3xl mt-1"></i>{" "}
-                </button>{" "}
+                <button
+                  type="button"
+                  className="mobile-menu-button focus:outline-none"
+                >
+                  <i className="bx bx-menu text-3xl mt-1"></i>
+                </button>
               </div>
             </div>
           </div>
           <div className="mobile-menu hidden md:hidden">
-            {" "}
             <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">
               Home
-            </a>{" "}
+            </a>
             <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">
               Contact
-            </a>{" "}
+            </a>
             <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">
               Pricing
-            </a>{" "}
+            </a>
             <a href="#" className="block py-2 px-4 text-sm hover:bg-gray-200">
               Features
-            </a>{" "}
+            </a>
           </div>
         </nav>
       </header>
+
+      {showLogin && (
+        <LoginModal hide={() => setShowLogin(false)} login={login} />
+      )}
+      {showSignUp && (
+        <SignUpModal hide={() => setShowSignUp(false)} signup={signup} />
+      )}
     </>
   );
-  }
 }

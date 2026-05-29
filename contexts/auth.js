@@ -33,13 +33,26 @@ export function AuthProvider(props) {
   }
 
   async function signup({ name, username, email, password }) {
+    if (!registerUrl) {
+      throw new Error(
+        "Register API URL is not configured. Set NEXT_PUBLIC_API_URL_Register on Netlify."
+      );
+    }
     await axios.post(registerUrl, {
       username,
       email,
       password,
       first_name: name,
     });
-    await login(username, email, password);
+    try {
+      await login(username, email, password);
+    } catch (loginError) {
+      const err = new Error(
+        "Account created, but automatic sign-in failed. Please log in manually."
+      );
+      err.cause = loginError;
+      throw err;
+    }
   }
 
   function logout() {
