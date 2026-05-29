@@ -7,7 +7,7 @@ import SignUpModal from "./sub_components/SignupModal";
 
 
 export default function Header() {
-  let { user, login, logout } = useAuth();
+  let { user, login, logout, signup } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
 
@@ -33,7 +33,7 @@ export default function Header() {
   }
   else if(showSignUp)
   {
-    return <>{showSignUp && <SignUpModal hide={hideSignUpModal} signup={()=>{console.log("SIGNED UP USER")/*pass the actual signup function here*/}} />}</>
+    return <>{showSignUp && <SignUpModal hide={hideSignUpModal} signup={signup} />}</>
   }
   else{
   return (

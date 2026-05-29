@@ -1,16 +1,40 @@
+import { useState } from "react";
+
+function formatSignupError(error) {
+  const data = error?.response?.data;
+  if (!data) return "Signup failed. Please check your connection and try again.";
+  if (typeof data === "string") return data;
+  return Object.entries(data)
+    .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(" ") : value}`)
+    .join("\n");
+}
+
 export default function SignUpModal(props) {
-  const signupUser = (event) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const signupUser = async (event) => {
     event.preventDefault();
+    setError("");
+    setLoading(true);
 
     const newUser = {
-      name: event.target.name.value,
-      username: event.target.username.value,
-      email: event.target.email.value,
+      name: event.target.name.value.trim(),
+      username: event.target.username.value.trim(),
+      email: event.target.email.value.trim(),
       mobile: event.target.mobile.value,
       password: event.target.password.value,
     };
-    console.log(newUser);
-    props.signup(/*Pass here the info*/);
+
+    try {
+      await props.signup(newUser);
+      props.hide();
+      setTimeout(() => window.location.reload(), 500);
+    } catch (err) {
+      setError(formatSignupError(err));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +62,12 @@ export default function SignUpModal(props) {
                 ></path>
               </svg>
             </div>
-            <form action="/" onSubmit={signupUser}>
+            <form onSubmit={signupUser}>
+              {error && (
+                <p className="mx-6 mt-4 text-sm text-red-600 whitespace-pre-line">
+                  {error}
+                </p>
+              )}
               <div className="flex flex-col px-6 py-5 bg-gray-50">
                 <p className="mb-2 font-semibold text-gray-700">Name</p>
                 <input
@@ -47,6 +76,7 @@ export default function SignUpModal(props) {
                   id="name"
                   name="name"
                   placeholder="Please enter your full name"
+                  required
                 />
               </div>
               <div className="flex flex-col px-6 py-5 bg-gray-50">
@@ -56,6 +86,7 @@ export default function SignUpModal(props) {
                   className="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-10"
                   id="username"
                   name="username"
+                  required
                 />
               </div>
               <div className="flex flex-col px-6 py-5 bg-gray-50">
@@ -65,6 +96,7 @@ export default function SignUpModal(props) {
                   className="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-10"
                   id="email"
                   name="email"
+                  required
                 />
               </div>
               <div className="flex flex-col px-6 py-5 bg-gray-50">
@@ -72,7 +104,7 @@ export default function SignUpModal(props) {
                   Mobile Number
                 </p>
                 <input
-                  type="number"
+                  type="tel"
                   className="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-10"
                   id="mobile"
                   name="mobile"
@@ -85,20 +117,25 @@ export default function SignUpModal(props) {
                   className="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-10"
                   id="password"
                   name="password"
+                  required
+                  minLength={8}
                 />
               </div>
               <div className="flex flex-row items-center justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg">
                 <button
+                  type="button"
                   className="font-semibold text-gray-600"
                   onClick={props.hide}
+                  disabled={loading}
                 >
                   Cancel
                 </button>
                 <button
-                  className="px-4 py-2 text-black font-semibold bg-lime-300 rounded"
+                  className="px-4 py-2 text-black font-semibold bg-lime-300 rounded disabled:opacity-50"
                   type="submit"
+                  disabled={loading}
                 >
-                  Sign Up
+                  {loading ? "Signing up…" : "Sign Up"}
                 </button>
               </div>
             </form>
