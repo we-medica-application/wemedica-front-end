@@ -1,4 +1,5 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
-    // Target must be serverless
-
-  };
+  reactStrictMode: true,
+  poweredByHeader: false,
+};
