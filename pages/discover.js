@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { pageTitle } from "../lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import DiscoverDropDown from "../components/DiscoverDropDown";
@@ -16,7 +17,7 @@ const [selectedDisease, selectDisease] = useState(0);
     // <div className="flex flex-col min-h-screen justify-around">
     <div className="flex flex-col justify-between h-screen">
       <Head>
-        <title>Discover</title>
+        <title>{pageTitle("Discover")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

@@ -1,3 +1,5 @@
+import { staticImage } from "../lib/assets";
+
 export default function HomeGridOne() {
   return (
     <>
@@ -8,7 +10,7 @@ export default function HomeGridOne() {
               <div className="group relative">
                 <div className="relative w-full h-80 bg-white rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
                   <img
-                    src="../static/Stroke.jpg"
+                    src={staticImage("Stroke.jpg")}
                     alt="Stroke"
                     className="w-full h-full object-center object-cover"
                   />
@@ -27,7 +29,7 @@ export default function HomeGridOne() {
               <div className="group relative">
                 <div className="relative w-full h-80 bg-white rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
                   <img
-                    src="../static/Model.jpg"
+                    src={staticImage("Model.jpg")}
                     alt="Hepatitis"
                     className="w-full h-full object-center object-cover"
                   />
@@ -48,7 +50,7 @@ export default function HomeGridOne() {
               <div className="group relative">
                 <div className="relative w-full h-80 bg-white rounded-lg overflow-hidden sm:aspect-w-2 sm:aspect-h-1 sm:h-64 lg:aspect-w-1 lg:aspect-h-1">
                   <img
-                    src="../static/BCancer2.jpg"
+                    src={staticImage("BCancer2.jpg")}
                     alt="Breast Cancer"
                     className="w-full h-full object-center object-cover"
                   />

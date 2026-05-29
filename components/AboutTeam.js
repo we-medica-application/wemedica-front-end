@@ -1,6 +1,8 @@
 
 
 
+import { staticImage } from "../lib/assets";
+
 export default function AboutTeam() {
     return (
   
@@ -14,7 +16,7 @@ export default function AboutTeam() {
     <div className="columns-4 mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
       <div className="group relative">
         <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-          <img src="../static/Fasial.jpg" alt="Fasial" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
+          <img src={staticImage("Fasial.jpg")} alt="Fasial" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
         </div>
         <div className="mt-4 flex justify-between">
           <div>
@@ -32,7 +34,7 @@ export default function AboutTeam() {
 
        <div className="group relative">
         <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-          <img src="../static/Jehad.jpg" alt="Jehad" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
+          <img src={staticImage("Jehad.jpg")} alt="Jehad" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
         </div>
         <div className="mt-4 flex justify-between">
           <div>
@@ -49,7 +51,7 @@ export default function AboutTeam() {
       </div>
       <div className="group relative">
         <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-          <img src="../static/Musab.jpg" alt="Musab." className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
+          <img src={staticImage("Musab.jpg")} alt="Musab." className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
         </div>
         <div className="mt-4 flex justify-between">
           <div>
@@ -68,7 +70,7 @@ export default function AboutTeam() {
      
       <div className="group relative">
         <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-md overflow-hidden group-hover:opacity-75 lg:h-80 lg:aspect-none">
-          <img src="../static/shahdalkha.jpg" alt="shahed" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
+          <img src={staticImage("shahdalkha.jpg")} alt="shahed" className="w-full h-full object-center object-cover lg:w-full lg:h-full"/>
         </div>
         <div className="mt-4 flex justify-between">
           <div>

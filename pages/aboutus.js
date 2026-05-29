@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { pageTitle } from "../lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import AboutGrid from "../components/AboutGrid";
@@ -8,7 +9,7 @@ export default function AboutUs() {
   return (
     <div className="flex flex-col justify-between h-screen">
       <Head>
-        <title>About Us</title>
+        <title>{pageTitle("About Us")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

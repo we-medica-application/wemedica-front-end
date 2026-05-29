@@ -5,7 +5,7 @@
 - Jehad Abu Awwad
 - Shahed Al Khateeb
 
-# **AI Medica**
+# **We Medica**
 
 A web application serves users who want to check their medical tests for a specific disease during his discovering process, It can help patient or doctors as assistant for check Pathological case if he is Positve or Negative in set of disease list.
 

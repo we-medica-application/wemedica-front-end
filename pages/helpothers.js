@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { pageTitle } from "../lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HelpHero from "../components/HelpHero";
@@ -9,7 +10,7 @@ export default function HelpOthers() {
   return (
     <div className="flex flex-col justify-between h-screen">
       <Head>
-        <title>Help Others</title>
+        <title>{pageTitle("Help Others")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

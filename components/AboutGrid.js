@@ -1,9 +1,11 @@
+import { staticImage } from "../lib/assets";
+
 export default function AboutGrid() {
   return (
     <>
       <div className="">
         <img
-          src="../static/MisisonVision.jpg"
+          src={staticImage("MisisonVision.jpg")}
           alt="Mission and Vision"
           className="w-full h-1/15"
         />

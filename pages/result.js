@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { pageTitle } from "../lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -13,7 +14,7 @@ export default function result() {
 
     <div className="justify-center min-h-screen">
       <Head>
-        <title>Result</title>
+        <title>{pageTitle("Results")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

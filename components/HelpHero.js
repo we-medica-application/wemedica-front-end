@@ -1,9 +1,11 @@
+import { staticImage } from "../lib/assets";
+
 export default function HelpHero() {
   return (
     <>
       <div className="">
         <img
-          src="../static/BCancer.jpg"
+          src={staticImage("BCancer.jpg")}
           alt="help other hero image, Breast Cancer"
           className="w-full h-1/15"
         />
