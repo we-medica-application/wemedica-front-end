@@ -2,12 +2,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
     "start": "next start",
     "test": "jest --watch --config ./config/jest.config.js"
   },
   "engines": {
-    "node": "16.20"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.2",
